@@ -1,9 +1,14 @@
 // CRM.cpp: определяет точку входа для консольного приложения.
 //
-#include "stdafx.h"
-
+#include "CRM.h"
 int main()
 {
+	//Storage s;
+	//Individual* in=new Individual();
+	//Entity* e=new Entity();
+	//s.Add(in);
+	//s.Add(e);
+	system("pause");
     return 0;
 }
 

@@ -1,10 +1,29 @@
 #pragma once
 #include<string>
 #include<vector>
+#include <typeinfo>
+#include<iostream>
 using namespace std;
-class Client
+class Manager
 {
 private:
+	string surname;
+	string name;
+	string midname;
+	string position;
+public:
+	Manager(string s="", string n="", string m="", string p="");
+	Manager(const Manager &m);
+	string getSurname();
+	string getName();
+	string getMidname();
+	string getPosition();
+	Manager& operator=(const Manager& right);//перегрузка оператора =
+	~Manager();
+};
+class Client
+{
+protected:
 	int id;
 	Manager mngr;
 	string address;
@@ -12,8 +31,7 @@ private:
 	string inn;
 	string activity;
 public:
-	Client(int i, Manager mn, string a, string p, string in, string act);
-	Client(const Client& c);
+	Client(Manager mn=Manager(),int i=0,string a="", string p="", string in="", string act="");
 	int getId();
 	Manager getMngr();
 	string getAddress();
@@ -29,12 +47,13 @@ private:
 	string name;
 	string midname;
 public:
-	Individual(int i, Manager mn, string s, string n, string m, string a, string p, string inn);
+	Individual(Manager mn = Manager(), int i=0,  string s="", string n="", string m="", string a="", string p="", string in="", string act="");
 	Individual(const Individual& i);
 	string getSurname();
 	string getName();
 	string getMidname();
 	~Individual();
+
 };
 class Entity : public Client
 {
@@ -42,39 +61,25 @@ private:
 	string orgzn;
 	string city;
 public:
-	Entity(int i, Manager mn, string o, string c, string a, string p, string inn);
+	Entity(Manager mn = Manager(),int i=0,string o="", string c="", string a="", string p="", string in="", string act="");
 	Entity(const Entity &e);
 	string getOrgzn();
 	string getCity();
 	~Entity();
 };
-class Manager
-{
-private:
-	string surname;
-	string name;
-	string midname;
-	string position;
-public:
-	Manager(string s, string n, string m, string p);
-	Manager(const Manager &m);
-	string getSurname();
-	string getName();
-	string getMidname();
-	string getPosition();
-	Manager& operator=(const Manager& right);//перегрузка оператора =
-	~Manager();
-};
 class Storage
 {
 private:
-	vector<Client*> sс;
+	vector<Client*> sc;
 	vector<string> type;
 public:
+	Storage();
 	Storage(const Storage& s);
 	string setType(Client *clnt);
 	void Add(Client* clnt);
 	void Sort(string by);
+	void Print();
 	Storage Find(string in, string f);
 	~Storage();
 };
+
