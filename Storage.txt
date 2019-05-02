@@ -1,0 +1,5 @@
+Individual: 2 Tarasov Dmitriy Igorevich ul.Puchkina 11111 111 top-koder Pluskin Ivan Ivanich buhgalter
+Entity: 1 OOOSUL Novgorod 11111 111 koderi Pluskin Ivan Ivanich buhgalter
+Individual: 5 Tolicov Anotoliy Maratich Tver 2222 111 top-koder Pluskin Ivan Ivanich buhgalter
+Entity: 10 AAAUL Moscow 33333 111 urodi Tomson Jerry Catmouse proger
+Entity: 3 Uber New-York 11111 111 konchi Pluskina Ivana Ivanina buhgalter

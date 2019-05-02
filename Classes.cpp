@@ -33,10 +33,19 @@ Manager& Manager::operator=(const Manager& right) {
 	position = right.position;
 	return *this;
 };
-Manager::~Manager() 
+ostream& operator<<(ostream& out, const Manager& m)
 {
-	cout << "Manager: " << surname << "deleted" << endl;
+	out << m.surname << " " << m.name << " "<< m.midname << " : " << m.position;
+	return out;
 };
+
+istream& operator>>(istream& in, Manager& m)
+{
+	in >> m.surname >> m.name >> m.midname >> m.position;
+	return in;
+};
+Manager::~Manager() 
+{};
 ////////////////
 Client::Client(Manager mn, int i, string a, string p, string in, string act) : id(i), mngr(mn), address(a), phone(p), inn(in), activity(act) {};
 int Client::getId()
@@ -63,10 +72,9 @@ string Client::getActivity()
 {
 	return activity;
 };
+
 Client::~Client()
-{
-	cout << "ID: "<< id << "deleted" << endl;
-};
+{};
 /////////////////
 Individual::Individual(Manager mn, int i,  string s, string n, string m, string a, string p, string in, string act) : Client(mn, i,  a, p, in, act), surname(s), name(n), midname(m) {};
 Individual::Individual(const Individual& i)
@@ -93,11 +101,18 @@ string Individual::getMidname()
 {
 	return midname;
 };
-Individual::~Individual()
+string Individual::get()
 {
-	cout << "Individual: " << surname << "deleted" << endl;
-};
-Entity::Entity(Manager mn, int i, string o, string c, string a, string p, string in, string act) :Client(mn, i, a, p, in, act), orgzn(o), city(c) {};
+	string out;
+	out= to_string(id)+" " + surname + " " + name + " " + midname +
+		" " + address + " " + phone + " " + inn + " "+ activity+"\nManager: " +
+		mngr.getSurname() + " " + mngr.getName() + " " + mngr.getMidname() + " " + mngr.getPosition();
+	return out;
+}
+Individual::~Individual()
+{};
+///////////////////
+Entity::Entity(Manager mn, int i, string o, string a, string p, string in, string act) :Client(mn, i, a, p, in, act), orgzn(o) {};
 Entity::Entity(const Entity &e)
 {
 	id = e.id;
@@ -107,20 +122,20 @@ Entity::Entity(const Entity &e)
 	inn = e.inn;
 	activity = e.activity;
 	orgzn = e.orgzn;
-	city = e.city;
 };
 string Entity::getOrgzn()
 {
 	return orgzn;
 };
-string Entity::getCity()
+string Entity::get()
 {
-	return city;
+	string out;
+	out= to_string(id)+" " + orgzn +" " + address + " " + phone + " " + inn + " "+activity+ "\nManager: " +
+		mngr.getSurname() + " " + mngr.getName() + " " + mngr.getMidname() + " " + mngr.getPosition();
+	return out;
 };
 Entity::~Entity()
-{
-	cout << "Entity: " << orgzn << "deleted" << endl;
-};
+{};
 Storage::Storage() {};
 Storage::Storage(const Storage& s)
 {
@@ -138,10 +153,20 @@ void Storage::Add(Client *clnt)
 }
 void Storage::Print()
 {
-		for (Client* v : sc)
-		{
-			cout << typeid(*v).name() << " ";
-		}
+	for (Client* v : sc)
+	{
+		if (strcmp(typeid(*v).name(),"class Individual")==0) 
+			cout << "Individual: ";
+		else cout << "Entity: ";
+		cout << v->get() << endl;
+	}
+}
+void Storage::Sort(string by)
+{
+	if (by=="id")
+	{
+		sort(sc.begin(),sc.end(),compID);
+	}
 }
 Storage::~Storage()
 {
@@ -150,3 +175,16 @@ Storage::~Storage()
 		delete c;
 	}
 }
+bool compID(Client* a, Client* b)
+{
+	return (a->getId()<b->getId());
+}
+bool compName(vector<Client*> a, vector<Client*> b);
+bool compSurname(vector<Client*> a, vector<Client*> b);
+bool compMidname(vector<Client*> a, vector<Client*> b);
+bool compManager(vector<Client*> a, vector<Client*> b);
+bool compAddress(vector<Client*> a, vector<Client*> b);
+bool compPhone(vector<Client*> a, vector<Client*> b);
+bool compINN(vector<Client*> a, vector<Client*> b);
+bool compActivity(vector<Client*> a, vector<Client*> b);
+bool compOrgzn(vector<Client*> a, vector<Client*> b);

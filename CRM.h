@@ -1,8 +1,10 @@
 #pragma once
 #include<string>
 #include<vector>
-#include <typeinfo>
+#include<typeinfo>
 #include<iostream>
+#include<algorithm>
+#include<fstream>
 using namespace std;
 class Manager
 {
@@ -19,6 +21,8 @@ public:
 	string getMidname();
 	string getPosition();
 	Manager& operator=(const Manager& right);//перегрузка оператора =
+	friend ostream& operator<<(ostream& out, const Manager& m);//перегрузка оператора <<
+	friend istream& operator>>(istream& in, Manager& m);//перегрузка оператора >>
 	~Manager();
 };
 class Client
@@ -38,6 +42,7 @@ public:
 	string getPhone();
 	string getINN();
 	string getActivity();
+	virtual string get() = 0;
 	virtual ~Client();
 };
 class Individual : public Client
@@ -52,6 +57,7 @@ public:
 	string getSurname();
 	string getName();
 	string getMidname();
+	string get();
 	~Individual();
 
 };
@@ -59,12 +65,11 @@ class Entity : public Client
 {
 private:
 	string orgzn;
-	string city;
 public:
-	Entity(Manager mn = Manager(),int i=0,string o="", string c="", string a="", string p="", string in="", string act="");
+	Entity(Manager mn = Manager(),int i=0,string o="", string a="", string p="", string in="", string act="");
 	Entity(const Entity &e);
 	string getOrgzn();
-	string getCity();
+	string get();
 	~Entity();
 };
 class Storage
@@ -80,4 +85,14 @@ public:
 	Storage Find(string in, string f);
 	~Storage();
 };
+bool compID(Client* a, Client* b);
+bool compName(vector<Client*> a, vector<Client*> b);
+bool compSurname(vector<Client*> a, vector<Client*> b);
+bool compMidname(vector<Client*> a, vector<Client*> b);
+bool compManager(vector<Client*> a, vector<Client*> b);
+bool compAddress(vector<Client*> a, vector<Client*> b);
+bool compPhone(vector<Client*> a, vector<Client*> b);
+bool compINN(vector<Client*> a, vector<Client*> b);
+bool compActivity(vector<Client*> a, vector<Client*> b);
+bool compOrgzn(vector<Client*> a, vector<Client*> b);
 
