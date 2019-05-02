@@ -71,11 +71,9 @@ class Storage
 {
 private:
 	vector<Client*> sc;
-	vector<string> type;
 public:
 	Storage();
 	Storage(const Storage& s);
-	string setType(Client *clnt);
 	void Add(Client* clnt);
 	void Sort(string by);
 	void Print();

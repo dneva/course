@@ -131,35 +131,17 @@ Storage::Storage(const Storage& s)
 			c = c1;
 		}
 	}
-	for (string str : type)
-	{
-		for (string str1 : s.type)
-		{
-			str = str1;
-		}
-	}
-};
-string Storage::setType(Client *clnt)
-{
-	if (typeid(*clnt).name() == "Individual")
-		return "Individual";
-	else if (typeid(*clnt).name() == "Entity")
-		return "Entity";
 };
 void Storage::Add(Client *clnt)
 {
 	sc.push_back(clnt);
-	type.push_back(setType(clnt));
 }
 void Storage::Print()
 {
-	for (string str : type)
-	{
 		for (Client* v : sc)
 		{
-			cout << str << " ";
+			cout << typeid(*v).name() << " ";
 		}
-	}
 }
 Storage::~Storage()
 {
