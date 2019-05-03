@@ -1,0 +1,6 @@
+Individual: ID: 2 Surname: Oscobin Name: Filimon Midname: Ippolitovich Address: Country: USA City: Roane Street: 3842 Pickens Way Phone: 903-345-3077 INN: 100000000000 Activity: Steward Manager: Myachikov Potap Makarovich curator
+Entity: ID: 1 Name: West Company Address: Country: USA City: Grand Rapids Street: 577 West Street Phone: 616-742-7477 INN: 766763209777 Activity: Ñars Manager: Myachikov Potap Makarovich curator
+Individual: ID: 5 Surname: Patel Name: Louis Midname: Jean Address: Country: Russia City: Krasnoyarsk Street: Krasnodarskaya Ul. Phone: +7(391)914-02-98 INN: 322816807291 Activity: Road inspector
+ Manager: Deitch Christopher John director
+Entity: ID: 10 Name: Upgrade Address: Country: Germany City: Albaching Street: Gubener Str. 8 Phone: 08039 96 91 64 INN: 630765967465 Activity: IT Manager: Deitch Christopher John director
+ 
