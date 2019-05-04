@@ -5,71 +5,106 @@
 #include<iostream>
 #include<algorithm>
 #include<fstream>
+#include<iomanip>
 using namespace std;
-class Manager
+class FullName
 {
 private:
 	string surname;
 	string name;
 	string midname;
-	string position;
 public:
-	Manager(string s="", string n="", string m="", string p="");
-	Manager(const Manager &m);
+	FullName(string sn="", string n="", string mn="");
+	FullName(const FullName& fn);
 	string getSurname();
 	string getName();
 	string getMidname();
+	string getAll(); 
+	FullName& operator=(const FullName& right);//перегрузка оператора =
+	friend ostream& operator<<(ostream& out, const FullName& fn);//перегрузка оператора <<
+	friend istream& operator>>(istream& in, FullName& fn);//перегрузка оператора >>
+	~FullName();
+};
+class Address
+{
+private:
+	string country;
+	string city;
+	string street;
+public:
+	Address(string c = "", string ci = "", string st = "");
+	Address(const Address& ad);
+	string getCountry();
+	string getCity();
+	string getStreet();
+	string getAll();
+	Address& operator=(const Address& right);//перегрузка оператора =
+	friend ostream& operator<<(ostream& out, const Address& ad);//перегрузка оператора <<
+	friend istream& operator>>(istream& in, Address& ad);//перегрузка оператора >>
+	~Address();
+};
+class Manager
+{
+private:
+	string position;
+	FullName fname;
+public:
+	Manager(string s="", string n="", string m="", string p="");
+	Manager(const Manager &m);
+	FullName getFullName();
 	string getPosition();
 	Manager& operator=(const Manager& right);//перегрузка оператора =
 	friend ostream& operator<<(ostream& out, const Manager& m);//перегрузка оператора <<
 	friend istream& operator>>(istream& in, Manager& m);//перегрузка оператора >>
 	~Manager();
 };
+
+
 class Client
 {
 protected:
 	int id;
 	Manager mngr;
-	string address;
+	Address address;
 	string phone;
 	string inn;
 	string activity;
 public:
-	Client(Manager mn=Manager(),int i=0,string a="", string p="", string in="", string act="");
+	Client(Manager mn=Manager(),int i=0,string a1="", string a2 = "", string a3 = "", string p="", string in="", string act="");
+	Client(Manager mn, int i, string p, string in, string act,Address a=Address());
 	int getId();
 	Manager getMngr();
 	string getAddress();
 	string getPhone();
 	string getINN();
 	string getActivity();
-	virtual string get() = 0;
+	virtual string getName() = 0;
+	virtual string forSave() = 0;
 	virtual ~Client();
 };
+
 class Individual : public Client
 {
 private:
-	string surname;
-	string name;
-	string midname;
+	FullName fname;
 public:
-	Individual(Manager mn = Manager(), int i=0,  string s="", string n="", string m="", string a="", string p="", string in="", string act="");
+	Individual(Manager mn = Manager(), int i=0,  string s="", string n="", string m="", string a1="", string a2 = "", string a3 = "", string p="", string in="", string act="");
+	Individual(Manager mn, int i, FullName fn, string p, string in, string act,Address a = Address());
 	Individual(const Individual& i);
-	string getSurname();
 	string getName();
-	string getMidname();
-	string get();
+	string forSave();
 	~Individual();
-
 };
 class Entity : public Client
 {
 private:
-	string orgzn;
+	string name;
 public:
-	Entity(Manager mn = Manager(),int i=0,string o="", string a="", string p="", string in="", string act="");
+	Entity(Manager mn = Manager(),int i=0,string n="", string a1="", string a2 = "", string a3 = "", string p="", string in="", string act="");
+	Entity(Manager mn, int i, string n, string p, string in, string act, Address a = Address());
 	Entity(const Entity &e);
-	string getOrgzn();
-	string get();
+	string getName();
+	string forSave();
 	~Entity();
 };
 class Storage
@@ -80,19 +115,21 @@ public:
 	Storage();
 	Storage(const Storage& s);
 	void Add(Client* clnt);
+	void Delete(int id);
+	void Save(ofstream& f);
+	void Load(ifstream& f);
 	void Sort(string by);
 	void Print();
-	Storage Find(string in, string f);
+	void Find(string f, string field);
+	int Size();
 	~Storage();
 };
-bool compID(Client* a, Client* b);
-bool compName(vector<Client*> a, vector<Client*> b);
-bool compSurname(vector<Client*> a, vector<Client*> b);
-bool compMidname(vector<Client*> a, vector<Client*> b);
-bool compManager(vector<Client*> a, vector<Client*> b);
-bool compAddress(vector<Client*> a, vector<Client*> b);
-bool compPhone(vector<Client*> a, vector<Client*> b);
-bool compINN(vector<Client*> a, vector<Client*> b);
-bool compActivity(vector<Client*> a, vector<Client*> b);
-bool compOrgzn(vector<Client*> a, vector<Client*> b);
+	bool compID(Client* a, Client* b);
+	bool compName(Client* a, Client* b);
+	bool compManager(Client* a, Client* b);
+	bool compAddress(Client* a, Client* b);
+	bool compPhone(Client* a, Client* b);
+	bool compINN(Client* a, Client* b);
+	bool compActivity(Client* a, Client* b);
+
 

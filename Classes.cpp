@@ -1,53 +1,145 @@
 #include"CRM.h"
-Manager::Manager(string s, string n, string m, string p) :surname(s), name(n), midname(m), position(p) {};
-Manager::Manager(const Manager &m)
+////////////FullName///////////////////
+FullName::FullName(string sn, string n, string mn) : surname(sn), name(n), midname(mn) {};
+FullName::FullName(const FullName& fn)
 {
-	surname = m.surname;
-	name = m.name;
-	midname = m.midname;
-	position = m.position;
-};
-string Manager::getSurname()
+	surname = fn.surname;
+	name = fn.name;
+	midname = fn.midname;
+}
+string FullName::getSurname()
 {
 	return surname;
-};
-string Manager::getName()
+}
+string FullName::getName()
 {
 	return name;
-};
-string Manager::getMidname()
+}
+string FullName::getMidname()
 {
 	return midname;
-};
-string Manager::getPosition()
+}
+string FullName::getAll()
 {
-	return position;
-};
-Manager& Manager::operator=(const Manager& right) {
+	string out;
+	out = surname + " " + name + " " + midname;
+	return out;
+}
+FullName& FullName::operator=(const FullName& right) {
 	if (this == &right) {
 		return *this;
 	}
 	surname = right.surname;
 	name = right.name;
 	midname = right.midname;
+	return *this;
+};
+ostream& operator<<(ostream& out, const FullName& fn)
+{
+	out << setw(12) << fn.surname << " " << setw(12) << fn.name  << " " << setw(12) << fn.midname;
+	return out;
+};
+
+istream& operator>>(istream& in, FullName& fn)
+{
+	in >> fn.surname >> fn.name >> fn.midname;
+	return in;
+};
+FullName::~FullName()
+{};
+////////////FullName///////////////////
+
+////////////Address///////////////////
+Address::Address(string c, string ci, string st) : country(c), city(ci), street(st) {};
+Address::Address(const Address& ad)
+{
+	country = ad.country;
+	city = ad.city;
+	street = ad.street;
+}
+string Address::getCountry()
+{
+	return country;
+}
+string Address::getCity()
+{
+	return city;
+}
+string Address::getStreet()
+{
+	return street;
+}
+string Address::getAll()
+{
+	string out;
+	out = country + " " + city + " " + street;
+	return out;
+}
+Address& Address::operator=(const Address& right)//перегрузка оператора =
+{
+	if (this == &right) {
+		return *this;
+	}
+	country = right.country;
+	city = right.city;
+	street = right.street;
+	return *this;
+}
+ostream& operator<<(ostream& out, const Address& ad)//перегрузка оператора <<
+{
+	out << ad.country << " " << ad.city << " " << ad.street;
+	return out;
+}
+istream& operator>>(istream& in, Address& ad)//перегрузка оператора >>
+{
+	in >> ad.country >> ad.city >> ad.street;
+	return in;
+}
+Address::~Address() {};
+////////////Address///////////////////
+
+////////////Manager///////////////////
+Manager::Manager(string s, string n, string m, string p) : fname(s,n,m), position(p) {};
+Manager::Manager(const Manager &m)
+{
+	fname = m.fname;
+	position = m.position;
+};
+FullName Manager::getFullName()
+{
+	return fname;
+};
+string Manager::getPosition()
+{
+	return position;
+};
+
+Manager& Manager::operator=(const Manager& right) {
+	if (this == &right) {
+		return *this;
+	}
+	fname = right.fname;
 	position = right.position;
 	return *this;
 };
 ostream& operator<<(ostream& out, const Manager& m)
 {
-	out << m.surname << " " << m.name << " "<< m.midname << " : " << m.position;
+	out << m.fname << setw(10) << m.position;
 	return out;
 };
 
 istream& operator>>(istream& in, Manager& m)
 {
-	in >> m.surname >> m.name >> m.midname >> m.position;
+	in >>  m.fname >> m.position;
 	return in;
 };
 Manager::~Manager() 
 {};
-////////////////
-Client::Client(Manager mn, int i, string a, string p, string in, string act) : id(i), mngr(mn), address(a), phone(p), inn(in), activity(act) {};
+////////////Manager///////////////////
+
+////////////Client///////////////////
+Client::Client(Manager mn, int i, string a1, string a2, string a3, string p, string in, string act) : id(i), mngr(mn), address(a1,a2,a3), phone(p), inn(in), activity(act) {};
+Client::Client(Manager mn, int i, string p, string in, string act, Address a) :id(i), mngr(mn), address(a), phone(p), inn(in), activity(act) {};
 int Client::getId()
 {
 	return id;
@@ -58,7 +150,7 @@ Manager Client::getMngr()
 };
 string Client::getAddress()
 {
-	return address;
+	return address.getAll();
 };
 string Client::getPhone()
 {
@@ -68,15 +160,18 @@ string Client::getINN()
 {
 	return inn;
 };
+
 string Client::getActivity()
 {
 	return activity;
 };
-
 Client::~Client()
 {};
-/////////////////
-Individual::Individual(Manager mn, int i,  string s, string n, string m, string a, string p, string in, string act) : Client(mn, i,  a, p, in, act), surname(s), name(n), midname(m) {};
+////////////Client///////////////////
+
+///////////Individual////////////////
+Individual::Individual(Manager mn, int i,  string s, string n, string m, string a1, string a2, string a3, string p, string in, string act) : Client(mn, i,  a1, a2, a3, p, in, act), fname(s,n,m) {};
+Individual::Individual(Manager mn, int i, FullName fn, string p, string in, string act, Address a) : Client(mn, i, p, in, act, a), fname(fn) {};
 Individual::Individual(const Individual& i)
 {
 	id = i.id;
@@ -85,34 +180,29 @@ Individual::Individual(const Individual& i)
 	phone = i.phone;
 	inn = i.inn;
 	activity = i.activity;
-	surname = i.surname;
-	name = i.name;
-	midname = i.midname;
-};
-string Individual::getSurname()
-{
-	return surname;
+	fname = i.fname;
 };
 string Individual::getName()
 {
-	return name;
+	return  fname.getAll();
 };
-string Individual::getMidname()
-{
-	return midname;
-};
-string Individual::get()
+string Individual::forSave()
 {
 	string out;
-	out= to_string(id)+" " + surname + " " + name + " " + midname +
-		" " + address + " " + phone + " " + inn + " "+ activity+"\nManager: " +
-		mngr.getSurname() + " " + mngr.getName() + " " + mngr.getMidname() + " " + mngr.getPosition();
+	out = "ID: " + to_string(id) + " Surname: " + fname.getSurname() + " Name: " + fname.getName()
+		+ " Midname: " + fname.getMidname() + " Address: Country: " + address.getCountry() +
+		+" City: " + address.getCity() + " Street: " + address.getStreet()
+		+ " Phone: " + phone + " INN: " + inn + " Activity: " + activity
+		+ " Manager: " + mngr.getFullName().getAll() +" "+ mngr.getPosition() + '\n';
 	return out;
 }
 Individual::~Individual()
 {};
-///////////////////
-Entity::Entity(Manager mn, int i, string o, string a, string p, string in, string act) :Client(mn, i, a, p, in, act), orgzn(o) {};
+///////////Individual////////////////
+
+///////////Entity////////////////
+Entity::Entity(Manager mn, int i, string n, string a1, string a2, string a3, string p, string in, string act) :Client(mn, i, a1,a2,a3, p, in, act), name(n) {};
+Entity::Entity(Manager mn, int i, string n, string p, string in, string act, Address a) : Client(mn, i, p, in, act, a), name(n) {};
 Entity::Entity(const Entity &e)
 {
 	id = e.id;
@@ -121,21 +211,27 @@ Entity::Entity(const Entity &e)
 	phone = e.phone;
 	inn = e.inn;
 	activity = e.activity;
-	orgzn = e.orgzn;
+	name = e.name;
 };
-string Entity::getOrgzn()
+string Entity::getName()
 {
-	return orgzn;
+	return name;
 };
-string Entity::get()
+string Entity::forSave()
 {
 	string out;
-	out= to_string(id)+" " + orgzn +" " + address + " " + phone + " " + inn + " "+activity+ "\nManager: " +
-		mngr.getSurname() + " " + mngr.getName() + " " + mngr.getMidname() + " " + mngr.getPosition();
+	out = "ID: " + to_string(id) + " Name: " + name
+		+ " Address: Country: " + address.getCountry() +
+		+ " City: " + address.getCity() + " Street: " + address.getStreet()
+		+ " Phone: " + phone + " INN: " + inn + " Activity: " + activity
+		+ " Manager: " + mngr.getFullName().getAll() + " " + mngr.getPosition() + '\n';
 	return out;
-};
+}
 Entity::~Entity()
 {};
+///////////Entity////////////////
+
+///////////Storage////////////////
 Storage::Storage() {};
 Storage::Storage(const Storage& s)
 {
@@ -153,12 +249,17 @@ void Storage::Add(Client *clnt)
 }
 void Storage::Print()
 {
+	cout << left <<setw(13) << "Type:" << setw(4) << "ID:" << setw(30) << "Name:"
+		<< setw(40) << "Address:" << setw(20) << "Phone:" << setw(15) << "INN:"
+		<< setw(15) << "Activity:" << setw(30) << "Manager:"<<endl;
 	for (Client* v : sc)
 	{
 		if (strcmp(typeid(*v).name(),"class Individual")==0) 
-			cout << "Individual: ";
-		else cout << "Entity: ";
-		cout << v->get() << endl;
+			cout << setw(13) << left<< "Individual: ";
+		else cout<< setw(13) << left << "Entity: ";
+		cout << setw(4) <<left << v->getId() << setw(30) << v->getName() << setw(40) 
+			<< v->getAddress() << setw(20) << v->getPhone() << setw(15) <<
+			v->getINN() << setw(15) << v->getActivity() <<v->getMngr()<< endl;
 	}
 }
 void Storage::Sort(string by)
@@ -167,24 +268,213 @@ void Storage::Sort(string by)
 	{
 		sort(sc.begin(),sc.end(),compID);
 	}
+	else if(by=="name")
+	{
+		sort(sc.begin(), sc.end(), compName);
+	}
+	else if (by == "manager")
+	{
+		sort(sc.begin(), sc.end(), compManager);
+	}
+	else if (by == "address")
+	{
+		sort(sc.begin(), sc.end(), compAddress);
+	}
+	else if (by == "phone")
+	{
+		sort(sc.begin(), sc.end(), compPhone);
+	}
+	else if (by == "inn")
+	{
+		sort(sc.begin(), sc.end(), compINN);
+	}
+	else if (by == "activity")
+	{
+		sort(sc.begin(), sc.end(), compActivity);
+	}
+	else
+	{
+		cout << "Incorrect field" << endl;
+	}
 }
-Storage::~Storage()
+void Storage::Save(ofstream& f)
 {
 	for (Client*c : sc)
 	{
-		delete c;
+		if (strcmp(typeid(*c).name(), "class Individual") == 0)
+			f << "Individual: ";
+		else 
+			f << "Entity: ";
+		f << c->forSave();
 	}
 }
+void Storage::Delete(int id)
+{
+	int i=0;
+	for (Client*c : sc)
+	{
+		if (c->getId() == id)
+		{
+			sc.erase(sc.begin()+i);
+		}
+		i++;
+	}
+}
+void Storage::Find(string f, string field)
+{
+	Storage strg;
+	string s;
+	for (Client*c : sc)
+	{
+		if (field == "id") s = to_string(c->getId());
+		else if (field == "name") s = c->getName();
+		else if (field == "manager") s = c->getMngr().getFullName().getAll();
+		else if (field == "address") s = c->getAddress();
+		else if (field == "phone") s = c->getPhone();
+		else if (field == "inn") s = c->getINN();
+		else if (field == "activity") s = c->getActivity();
+
+		if (s.find(f) != string::npos)
+		{
+			cout << s.find(f) << endl;
+			strg.Add(c);
+		}
+	}
+	if (strg.Size() > 0) strg.Print();
+	else cout << "Not found"<<endl;
+	
+}
+int Storage::Size()
+{
+	return sc.size();
+}
+void Storage::Load(ifstream& f)
+{
+	string buf;
+	Individual* i;
+	Entity* e;
+	int id;
+	string sn, n, mn, adrs1, adrs2, adrs3, ph, in, act;
+	Manager  mngr;
+	while (f >> buf)
+	{
+		if (buf == "Individual:")
+		{
+			f >> buf >> id >> buf >> sn >> buf >> n >> buf >> mn >> buf >> buf >> buf;
+			while (buf != " City:")
+			{
+				adrs1 += buf;
+				f >> buf;
+				buf = " " + buf;
+			}
+			f >> buf;
+			while (buf != " Street:")
+			{
+				adrs2 += buf;
+				f >> buf;
+				buf = " " + buf;
+			}
+
+			f >> buf;
+
+			while (buf != " Phone:")
+			{
+				adrs3 += buf;
+				f >> buf;
+				buf = " " + buf;
+			}
+			f >> ph;
+			f >> buf;
+			f >> in;
+			f >> buf >> buf;
+			while (buf != " Manager:")
+			{
+				act += buf;
+				f >> buf;
+				buf = " " + buf;
+			}
+			f >> mngr;
+			i = new Individual(mngr, id, sn, n, mn, adrs1, adrs2, adrs3, ph, in, act);
+			Add(i);
+
+		}
+		else
+		{
+			f >> buf >> id >> buf >> buf;
+			while (buf != " Address:")
+			{
+				n += buf;
+				f >> buf;
+				buf = " " + buf;
+			}
+			f >> buf >> buf;
+			while (buf != " City:")
+			{
+				adrs1 += buf;
+				f >> buf;
+				buf = " " + buf;
+			}
+			f >> buf;
+			while (buf != " Street:")
+			{
+				adrs2 += buf;
+				f >> buf;
+				buf = " " + buf;
+			}
+			f >> buf;
+			while (buf != " Phone:")
+			{
+				adrs3 += buf;
+				f >> buf;
+				buf = " " + buf;
+			}
+			f >> ph;
+			f >> buf;
+			f >> in;
+			f >> buf >> buf;
+			while (buf != " Manager:")
+			{
+				act += buf;
+				f >> buf;
+				buf = " " + buf;
+			}
+			f >> mngr;
+			e = new Entity(mngr, id, n, adrs1, adrs2, adrs3, ph, in, act);
+			Add(e);
+
+		}
+		n = ""; adrs1 = ""; adrs2 = ""; adrs3 = ""; act = "";
+	}
+}
+Storage::~Storage()
+{}
+
+///////////Storage////////////////
 bool compID(Client* a, Client* b)
 {
 	return (a->getId()<b->getId());
 }
-bool compName(vector<Client*> a, vector<Client*> b);
-bool compSurname(vector<Client*> a, vector<Client*> b);
-bool compMidname(vector<Client*> a, vector<Client*> b);
-bool compManager(vector<Client*> a, vector<Client*> b);
-bool compAddress(vector<Client*> a, vector<Client*> b);
-bool compPhone(vector<Client*> a, vector<Client*> b);
-bool compINN(vector<Client*> a, vector<Client*> b);
-bool compActivity(vector<Client*> a, vector<Client*> b);
-bool compOrgzn(vector<Client*> a, vector<Client*> b);
+bool compName(Client* a, Client* b)
+{
+	return (a->getName() < b->getName());
+}
+bool compManager(Client* a, Client* b)
+{
+	return (a->getMngr().getFullName().getAll() < b->getMngr().getFullName().getAll());
+}
+bool compAddress(Client* a, Client* b)
+{
+	return (a->getAddress()<b->getAddress());
+}
+bool compPhone(Client* a, Client* b)
+{
+	return (a->getPhone()<b->getPhone());
+}
+bool compINN(Client* a, Client* b)
+{
+	return (a->getINN()<b->getINN());
+}
+bool compActivity(Client* a, Client* b)
+{
+	return (a->getActivity()<b->getActivity());
+}
